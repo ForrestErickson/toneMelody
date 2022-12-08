@@ -17,6 +17,10 @@
 
 #include "pitches.h"
 
+#define PROG_NAME "******toneMelody******"     //Descriptive name of this software, 20 characters.
+#define TONE_PIN 8
+#define BAUDRATE 115200
+
 // notes in the melody:
 int melody[] = {
   NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
@@ -28,21 +32,28 @@ int noteDurations[] = {
 };
 
 void setup() {
+  //Serial setup
+  delay(100);
+  Serial.begin(BAUDRATE);
+  delay(100);                         //Wait before sending the first data to terminal
+  Serial.println(PROG_NAME);
+  
   // iterate over the notes of the melody:
+  //Play a melody
   for (int thisNote = 0; thisNote < 8; thisNote++) {
 
     // to calculate the note duration, take one second divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
     int noteDuration = 1000 / noteDurations[thisNote];
-    tone(8, melody[thisNote], noteDuration);
+    tone(TONE_PIN, melody[thisNote], noteDuration);
 
     // to distinguish the notes, set a minimum time between them.
     // the note's duration + 30% seems to work well:
     int pauseBetweenNotes = noteDuration * 1.30;
     delay(pauseBetweenNotes);
     // stop the tone playing:
-    noTone(8);
-  }
+    noTone(TONE_PIN);
+  }// end play a melody
 }
 
 void loop() {
